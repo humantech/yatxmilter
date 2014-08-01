@@ -117,7 +117,7 @@ As a plus, the **txmilter** can handle more than one milter plugin on the same c
     
 ``` 
 
-and that all :)
+and that's all :)
 
 #todo
 
