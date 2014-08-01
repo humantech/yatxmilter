@@ -11,7 +11,7 @@ The goal of using **txmilter** is to provide a _faster_ response using Twisted's
 
 ###how do I use it?
 
-first, you'll have to install it using pip or from [PyPI](https://pypi.python.org/pypi):
+first, you'll have to install it using pip or from [PyPI](https://pypi.python.org/pypi/txmilter):
 
 ```
 $ pip install txmilter
