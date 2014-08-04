@@ -2,7 +2,7 @@
 from __future__ import unicode_literals
 from twisted.internet import protocol, defer
 from twisted.python.constants import ValueConstant, Values
-from defaults import MilterFactory, Milter
+from yatxmilter.defaults import Milter
 from struct import *
 from time import time
 
