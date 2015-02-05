@@ -56,6 +56,7 @@ class _MilterProtocolRcv(object):
                    'UNKNOW':      r'U',
                    'HEADER':      r'L',
                    'BODY':        r'B',
+                   'BODYC':       u'\x00',
                    'ABORT':       r'A',
                    'MACRO':       r'D',
                    'BODYEOB':     r'E',
@@ -73,6 +74,7 @@ class _MilterProtocolRcv(object):
                           _MilterProtocolRcv.recv_commands['MACRO']:   self.DfCmdMacro,
                           _MilterProtocolRcv.recv_commands['BODYEOB']: self.DfCmdBodyEob,
                           _MilterProtocolRcv.recv_commands['BODY']:    self.DfCmdBody,
+                          _MilterProtocolRcv.recv_commands['BODYC']:   self.DfCmdBody,
                           _MilterProtocolRcv.recv_commands['QUIT']:    self.DfCmdQuit,
                           _MilterProtocolRcv.recv_commands['QUIT_NC']: self.DfCmdQuit,
                           _MilterProtocolRcv.recv_commands['HELO']:    self.DfCmdHello,
@@ -183,7 +185,7 @@ class _MilterProtocolRcv(object):
     def DfCmdBody(self, barr):
         req = MilterRequest(len(self._protocol.milters))
         for m in self._protocol.milters:
-            req.addDeferred( m.xxfi_body(str(barr)) )
+            req.addDeferred( m.xxfi_body(barr) )
         req.getDefer().addCallback(self._protocol.send.DfCmdDefaultReply)
         req.getDefer().addErrback(self._protocol.send.DfCmdDefaultErr)
 
@@ -191,7 +193,7 @@ class _MilterProtocolRcv(object):
     def DfCmdBodyEob(self, barr):
         req = MilterRequest(len(self._protocol.milters))
         for m in self._protocol.milters:
-            req.addDeferred( m.xxfi_body(str(barr)) )
+            req.addDeferred( m.xxfi_body(barr) )
         req.getDefer().addCallback(self.DfCmdBodyEob_reply)
         req.getDefer().addErrback(self._protocol.send.DfCmdDefaultErr)
 
@@ -450,7 +452,7 @@ class _MilterProtocolSend(object):
 class MilterProtocol(protocol.Protocol):
     def __init__(self):
         self.milters = []
-        self.tick_timeout = 0.1
+        self.tick_timeout = 3
 
         self._buffer = bytearray()
         self._last_tick = time()
